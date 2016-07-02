@@ -1,14 +1,49 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdio.h>
+#include <unistd.h>
+#include <getopt.h>
 
 int checkGuess();
+void generate();
+void play();
+
 
 int main(int argc, char *argv[]) {
-  srand(time(NULL)); // need to seed time at every exec
+  int c;
+  int gflag = 0;
 
-  int guess;
+  srand(time(NULL)); // need to seed time at every exec
   int randomNumber = (rand() % 10) + 1;
+
+  opterr = 0;
+
+  while ((c = getopt(argc, argv, "g")) != -1) {
+    switch(c) {
+      case 'g':
+        gflag = 1;
+        break;
+      case '?': 
+        fprintf (stderr, 
+                 "Unknown option `-%c'.\n", 
+                 optopt);
+        return 1;
+      default:
+        abort();
+      }
+  }
+
+  if (gflag == 1)
+    play(randomNumber);
+  else 
+    generate(randomNumber);
+
+  return 0;
+}
+
+
+void play(int randomNumber) {
+  int guess;
 
   printf("Welcome the the guessing game!\n");
   printf("Pick a number 1-10\n"); 
@@ -31,9 +66,9 @@ int main(int argc, char *argv[]) {
 
   printf("Good job! You've guessed: %d\n", guess);
   printf("Random number is: %d\n", randomNumber);
-
-  return 0;
+  return;
 }
+
 
 int checkGuess(int guess, int rando) {
   if (guess < 1 || guess > 10) {
@@ -45,4 +80,10 @@ int checkGuess(int guess, int rando) {
   } else {
     return 2;
   }
+}
+
+void generate(int rando) {
+  printf("Here is your random number: %d\nInput -g flag for some fun\n", 
+         rando);
+  return;
 }

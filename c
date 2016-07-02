@@ -16,6 +16,9 @@ int main(int argc, char *argv[]) {
   scanf("%d", &guess);
 
   while (checkGuess(guess, randomNumber) != 0) {
+    if (checkGuess(guess, randomNumber) == -1) {
+      printf("Pick a number between 1-10! ");
+    } 
     if (checkGuess(guess, randomNumber) == 1) {
       printf("Oh! Too small! ");
     } 
@@ -33,7 +36,9 @@ int main(int argc, char *argv[]) {
 }
 
 int checkGuess(int guess, int rando) {
-  if (guess == rando) {
+  if (guess < 1 || guess > 10) {
+    return -1;
+  } else if (guess == rando) {
     return 0;
   } else if (guess < rando) {
     return 1;
